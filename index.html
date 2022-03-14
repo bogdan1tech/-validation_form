@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ 
+ <title>Form</title>
+ 
+ <link rel="stylesheet" href="css/style.css" type="text/css"/>
+ 
+ <script defer src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+ <script defer src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+ <script defer src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+ 
+ <script defer src="js/app.js"></script>
+
+ 
+</head>
+<body>
+<div class="form-container">
+  <h2>Новый пациент:</h2>
+  <form
+    class="form" id="js-form" method="post" action="foobar"
+    @submit.prevent="submit"
+  >
+    <!-- Фамилия -->
+    <label class="form__group is-required">
+      <span class="form__label">Фамилия</span>
+      <input
+        class="form__input" placeholder="Иванов" type="text" name="form-surname"
+        v-model="surname" @input="$v.surname.$touch"
+      >
+      <p v-if="$v.surname.$dirty">
+        <span class="form__alert" v-if="!$v.surname.required">Required.</span>
+        <span class="form__alert" v-if="!$v.surname.minLength">
+          {{$v.surname.$params.minLength.min}} символа минимально необходимо.
+        </span>
+      </p>
+    </label>
+    <!-- Имя -->
+    <label class="form__group is-required">
+      <span class="form__label">Имя</span>
+      <input
+        class="form__input" placeholder="Антон" type="text" name="form-name"
+        v-model="name" @input="$v.name.$touch"
+      >
+      <p v-if="$v.name.$dirty">
+        <span class="form__alert" v-if="!$v.name.required">Required.</span>
+        <span class="form__alert" v-if="!$v.name.minLength">
+          {{$v.name.$params.minLength.min}} символа минимально необходимо.
+        </span>
+      </p>
+    </label>
+    <!-- Отчество -->
+    <label class="form__group">
+      <span class="form__label">Отчество</span>
+      <input
+        class="form__input" placeholder="Иванович" type="text" name="form-middle_name"
+        v-model="middle_name" @input="$v.middle_name.$touch"
+      >     
+      </p>
+    </label>
+      <!-- Дата рождения -->
+      <label class="form__group is-required">
+        <span class="form__label">Дата рождения</span>
+        <input
+          class="form__input" placeholder="Иванов" type="date" name="form-birth"
+          v-model="birth" @input="$v.birth.$touch"
+        >
+        
+      </label>
+      <!-- Номер телефона -->
+      <label class="form__group is-required">
+        <span class="form__label">Номер телефона</span>
+        <input
+          class="form__input" placeholder="79670235919" type="text" name="form-phone"
+          v-model="phone" @input="$v.phone.$touch"
+        >
+        <p v-if="$v.phone.$dirty">
+          <span class="form__alert" v-if="!$v.phone.required">Обязательно.</span>
+          <span class="form__alert" v-if="!$v.phone.minLength">
+            {{$v.phone.$params.minLength.min}} символов минимально необходимо.
+          </span>
+          <span class="form__alert" v-if="!$v.phone.maxLength">
+            Удалите. {{$v.phone.$params.maxLength.max}} символов максимально можно.</span>
+          
+          
+          <span class="form__alert" v-if="!$v.phone.numeric">Должны быть только цифры.</span>
+        </p>
+        
+      </label>
+    
+    <!-- Пол -->
+    <div class="form__group is-required">
+      <span class="form__label">Пол</span>
+      <label>
+        <input
+          class="form__input" type="radio" name="form-gender" value="1"
+          v-model="gender" @change="$v.gender.$touch"
+        >Мужчина
+      </label>
+      <label>
+        <input
+          class="form__input" type="radio" name="form-gender" value="2"
+          v-model="gender" @change="$v.gender.$touch"
+        >Женщина
+      </label>
+    </div>
+    <!-- Группа клиентов-->
+    <div class="form__group form__group--select  is-required">
+      <span class="form__label">Группа клиентов</span>
+      <select multiple
+        class="form__input" name="form-clients"
+        v-model="clients" @change="$v.clients.$touch"
+      >
+        <option value="1">VIP</option>
+        <option value="2">Проблемные</option>
+        <option value="3">ОМС</option>
+      </select>
+    </div>
+    <!-- Врач -->
+    <div class="form__group form__group--select is-required">
+      <span class="form__label">Лечащий врач.</span>
+      <select
+        class="form__input" name="form-doctor"
+        v-model="doctor" @change="$v.doctor.$touch"
+      >
+        <option value="1">Иванов</option>
+        <option value="2">Захаров</option>
+        <option value="3">Чернышева</option>
+      </select>
+    </div>
+    <!-- Чекбокс -->
+    <label class="form__group form__group--no-label form__group--checkbox">
+      <input
+        class="form__input" type="checkbox" name="form-checkbox"
+        v-model="checkbox"
+      >
+      <span class="form__label">Не отправлять СМС.</span>
+    </label>
+  
+    
+    
+    <h2>Адрес:</h2>
+    <!-- Индекс -->
+    <label class="form__group">
+      <span class="form__label">Индекс</span>
+        <input
+          class="form__input" placeholder="240000" type="text" name="form-index"
+          v-model="index" @input="$v.index.$touch"
+        >     
+      </p>
+    </label>
+  <!-- Страна -->
+    <label class="form__group">
+      <span class="form__label">Страна</span>
+        <input
+          class="form__input" placeholder="Россия" type="text" name="form-country"
+          v-model="country" @input="$v.country.$touch"
+        >     
+        </p>
+    </label>
+    <!-- Область -->
+    <label class="form__group">
+      <span class="form__label">Область</span>
+        <input
+          class="form__input" placeholder="Московская область" type="text" name="form-state"
+          v-model="state" @input="$v.state.$touch"
+        >     
+        </p>
+    </label>
+    <!-- Город -->
+    <label class="form__group is-required">
+      <span class="form__label">Город</span>
+      <input
+        class="form__input" placeholder="Москва" type="text" name="form-city"
+        v-model="city" @input="$v.city.$touch"
+      >
+      <p v-if="$v.city.$dirty">
+        <span class="form__alert" v-if="!$v.city.required">Обязательно.</span>
+        <span class="form__alert" v-if="!$v.city.minLength">
+          {{$v.city.$params.minLength.min}} символа минимально необходимо.
+        </span>
+      </p>
+    </label>
+    <!-- Улица -->
+    <label class="form__group">
+      <span class="form__label">Улица</span>
+        <input
+          class="form__input" placeholder="Миклухо-Маклая" type="text" name="form-street"
+          v-model="street" @input="$v.street.$touch"
+        >     
+        </p>
+    </label>
+    <!-- Дом -->
+    <label class="form__group">
+      <span class="form__label">Дом</span>
+        <input
+          class="form__input" placeholder="19" type="text" name="form-house"
+          v-model="house" @input="$v.house.$touch"
+        >     
+        </p>
+    </label>
+  <h2>Паспорт:</h2>
+  <!-- Тип документа -->
+  <div class="form__group form__group--select is-required">
+    <span class="form__label">Тип документа.</span>
+    <select
+      class="form__input" name="document"
+      v-model="document" @change="$v.document.$touch"
+    >
+      <option value="1">Паспорт</option>
+      <option value="2">Свидетельство о рождении</option>
+      <option value="3">Вод. удостоверение</option>
+    </select>
+  </div>
+  <!-- Серия -->
+  <label class="form__group">
+    <span class="form__label">Серия</span>
+      <input
+        class="form__input" placeholder="А" type="text" name="form-serial"
+        v-model="serial" @input="$v.serial.$touch"
+      >     
+      </p>
+  </label>
+  <!-- Номер -->
+  <label class="form__group">
+    <span class="form__label">Номер</span>
+      <input
+        class="form__input" placeholder="121-2424" type="text" name="form-number"
+        v-model="number" @input="$v.number.$touch"
+      >     
+      </p>
+  </label>
+  <!-- Кем выдан -->
+  <label class="form__group">
+    <span class="form__label">Кем выдан</span>
+      <input
+        class="form__input" placeholder="МВД МО" type="text" name="form-issued"
+        v-model="issued" @input="$v.issued.$touch"
+      >     
+      </p>
+  </label>
+  <!-- Дата выдачи -->
+  <label class="form__group is-required">
+    <span class="form__label">Дата выдачи</span>
+    <input
+      class="form__input" type="date" name="form-date_issued"
+      v-model="date_issued" @input="$v.date_issued.$touch"
+    >
+  </label>
+    <!-- Кнопка -->
+    <div class="form__group form__group--no-label form__group--button">
+      <button
+        class="form__input" type="submit" name="form-submit"
+        :disabled="$v.$invalid">Создать</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
+
